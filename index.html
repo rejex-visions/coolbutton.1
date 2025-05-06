@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trust Me Bro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background: #1e1e1e;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .cool-button {
+      background-color: grey;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      width: 165px;
+      height: 60px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cool-button.hovered {
+      background: linear-gradient(90deg, rgb(255, 35, 35), rgb(58, 58, 255));
+      box-shadow: 0 0 20px rgba(255, 0, 150, 0.6);
+      transform: scale(1.1);
+    }
+
+    .cool-button.expanded {
+      width: 525px;
+    }
+
+    .text-layer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    .static-text {
+      z-index: 0;
+    }
+
+    .ghost-text {
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .zoom-out-fast {
+      animation: zoomOutFade 1s forwards; /* Slower now */
+    }
+
+    @keyframes zoomOutFade {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="cool-button" id="coolBtn">
+    <span class="text-layer static-text visible" id="staticText">Hello!</span>
+    <span class="text-layer ghost-text hidden" id="textMain">Hello!</span>
+    <span class="text-layer hidden" id="textFinal">Wassup Fren? All Good? Surprise Here, LFG!</span>
+  </button>
+
+  <script>
+    const greetings = [
+      "こんにちは!", "হ্যালো!", "Hola!", "नमस्ते!", "Bonjour!", "Hallo!", "Hello!"
+    ];
+
+    const button = document.getElementById("coolBtn");
+    const textMain = document.getElementById("textMain");
+    const textFinal = document.getElementById("textFinal");
+    const staticText = document.getElementById("staticText");
+
+    let intervalId = null;
+    let index = 0;
+    let animationInProgress = false;
+    let animationCompleted = false;
+
+    function resetButton() {
+      clearInterval(intervalId);
+      intervalId = null;
+      textMain.className = "text-layer ghost-text hidden";
+      textFinal.className = "text-layer hidden";
+      staticText.className = "text-layer static-text visible";
+      textMain.textContent = "Hello!";
+      button.classList.remove("hovered", "expanded");
+      index = 0;
+      animationInProgress = false;
+      animationCompleted = false;
+    }
+
+    function startAnimation() {
+      animationInProgress = true;
+      button.classList.add("hovered");
+
+      // Initial zoom-out
+      textMain.textContent = "Hello!";
+      textMain.className = "text-layer ghost-text visible zoom-out-fast";
+
+      setTimeout(() => {
+        textMain.className = "text-layer ghost-text hidden";
+        staticText.className = "text-layer static-text hidden";
+        index = 0;
+
+        intervalId = setInterval(() => {
+          if (index < greetings.length - 1) {
+            textMain.textContent = greetings[index];
+            textMain.className = "text-layer ghost-text visible";
+            index++;
+          } else {
+            clearInterval(intervalId);
+
+            textMain.textContent = "Hello!";
+            setTimeout(() => {
+              textMain.className = "text-layer ghost-text visible zoom-out-fast";
+
+              setTimeout(() => {
+                textMain.className = "text-layer ghost-text hidden";
+                textFinal.className = "text-layer visible";
+                button.classList.add("expanded");
+                animationCompleted = true;
+                animationInProgress = false;
+              }, 800); // slightly slower final reveal
+
+            }, 100);
+          }
+        }, 500); // uniform timing
+      }, 500); // initial ghost "Hello!" zoom-out
+    }
+
+    button.addEventListener("mouseenter", () => {
+      if (!animationInProgress && !animationCompleted) {
+        startAnimation();
+      } else {
+        button.classList.add("hovered");
+      }
+    });
+
+    button.addEventListener("mouseleave", () => {
+      resetButton();
+    });
+
+    button.addEventListener("click", () => {
+      if (animationCompleted) {
+        window.open("https://youtu.be/xvFZjo5PgG0?si=z9oLlZj7anCbpM21", "_blank");
+      }
+    });
+  </script>
+
+</body>
+</html>
