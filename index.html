@@ -21,9 +21,9 @@
       color: white;
       border: none;
       border-radius: 50px;
-      width: 165px;
+      width: 195px;
       height: 60px;
-      font-size: 20px;
+      font-size: 17px;
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
@@ -37,7 +37,7 @@
     }
 
     .cool-button.expanded {
-      width: 615px;
+      width: 570px;
     }
 
     .text-layer {
@@ -87,14 +87,14 @@
 <body>
 
   <button class="cool-button" id="coolBtn">
-    <span class="text-layer static-text visible" id="staticText">Hello!</span>
-    <span class="text-layer ghost-text hidden" id="textMain">Hello!</span>
+    <span class="text-layer static-text visible" id="staticText">Hello! (Hover pls)</span>
+    <span class="text-layer ghost-text hidden" id="textMain">Hello! (Hover pls)</span>
     <span class="text-layer hidden" id="textFinal">Wassup Fren? All Good? Click Me for the Surprise, LFG!</span>
   </button>
 
   <script>
     const greetings = [
-      "こんにちは!", "হ্যালো!", "Hola!", "नमस्ते!", "Bonjour!", "Hallo!", "Hello!"
+      "こんにちは!", "হ্যালো!", "Hola!", "नमस्ते!", "Bonjour!", "Hallo!", "Hello!  (Hover pls)"
     ];
 
     const button = document.getElementById("coolBtn");
@@ -113,7 +113,7 @@
       textMain.className = "text-layer ghost-text hidden";
       textFinal.className = "text-layer hidden";
       staticText.className = "text-layer static-text visible";
-      textMain.textContent = "Hello!";
+      textMain.textContent = "Hello! (Hover pls)";
       button.classList.remove("hovered", "expanded");
       index = 0;
       animationInProgress = false;
@@ -125,7 +125,7 @@
       button.classList.add("hovered");
 
       // Initial zoom-out
-      textMain.textContent = "Hello!";
+      textMain.textContent = "Hello! (Hover pls)";
       textMain.className = "text-layer ghost-text visible zoom-out-fast";
 
       setTimeout(() => {
