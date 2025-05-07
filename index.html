@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="refresh" content="0; url=https://insaneshit.vercel.app">
   <title>insane shit</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
@@ -60,7 +61,7 @@
     }
 
     .zoom-out-fast {
-      animation: zoomOutFade 1s forwards; /* Slower now */
+      animation: zoomOutFade 1s forwards;
     }
 
     @keyframes zoomOutFade {
@@ -124,7 +125,6 @@
       animationInProgress = true;
       button.classList.add("hovered");
 
-      // Initial zoom-out
       textMain.textContent = "Hello! (Hover pls)";
       textMain.className = "text-layer ghost-text visible zoom-out-fast";
 
@@ -140,23 +140,20 @@
             index++;
           } else {
             clearInterval(intervalId);
-
             textMain.textContent = "Hello!";
             setTimeout(() => {
               textMain.className = "text-layer ghost-text visible zoom-out-fast";
-
               setTimeout(() => {
                 textMain.className = "text-layer ghost-text hidden";
                 textFinal.className = "text-layer visible";
                 button.classList.add("expanded");
                 animationCompleted = true;
                 animationInProgress = false;
-              }, 800); // slightly slower final reveal
-
+              }, 800);
             }, 100);
           }
-        }, 500); // uniform timing
-      }, 500); // initial ghost "Hello!" zoom-out
+        }, 500);
+      }, 500);
     }
 
     button.addEventListener("mouseenter", () => {
