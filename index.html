@@ -10,256 +10,213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>insane shit</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    body {
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      background: #1e1e1e;
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      overflow: hidden; /* Prevent scroll bars */
-    }
-
-    .cool-button {
-      background-color: grey;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      width: 195px; /* Initial width for larger screens */
-      height: 60px;
-      font-size: 17px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-
-    .cool-button.hovered {
-      background: linear-gradient(90deg, rgb(255, 35, 35), rgb(58, 58, 255));
-      box-shadow: 0 0 20px rgba(255, 0, 150, 0.6);
-      transform: scale(1.1);
-    }
-
-    .cool-button.expanded {
-      width: 570px; /* Default expanded width for larger screens */
-    }
-
-    .text-layer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      transition: opacity 0.3s ease;
-      white-space: nowrap; /* Prevent text wrapping */
-      font-weight: 600;
-    }
-
-    .static-text {
-      z-index: 0;
-    }
-
-    .ghost-text {
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .zoom-out-fast {
-      animation: zoomOutFade 1s forwards;
-    }
-
-    @keyframes zoomOutFade {
-      0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
+    <style>
+      body {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        background: #1e1e1e;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden; /* Prevent scroll bars */
       }
-      100% {
-        transform: translate(-50%, -50%) scale(1.4);
-        opacity: 0;
-      }
-    }
 
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .visible {
-      opacity: 1;
-    }
-
-    /* Responsive styles for smaller screens */
-    @media (max-width: 600px) {
       .cool-button {
-        width: 160px; /* Smaller initial width for mobile */
-        height: 50px; /* Slightly smaller height */
-        font-size: 13px; /* Smaller font size to fit text */
-        min-width: fit-content; /* Ensure the button width adjusts to content */
+        background-color: grey;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        width: 195px; /* Default width for larger screens */
+        height: 60px;
+        font-size: 17px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      .cool-button.hovered {
+        background: linear-gradient(90deg, rgb(255, 35, 35), rgb(58, 58, 255));
+        box-shadow: 0 0 20px rgba(255, 0, 150, 0.6);
+        transform: scale(1.1);
       }
 
       .cool-button.expanded {
-        width: 90vw; /* Use viewport width to fit screen */
-        max-width: 320px; /* Adjusted to fit the longest text in one line */
+        width: 570px; /* Default expanded width for larger screens */
       }
 
       .text-layer {
-        font-size: 13px; /* Match the button's font size */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s ease;
         white-space: nowrap; /* Prevent text wrapping */
-        text-align: center; /* Center the text */
-        padding: 0 10px; /* Add padding to prevent text from touching edges */
-        box-sizing: border-box; /* Ensure padding doesn't increase size */
-      }
-    }
-
-    @media (max-width: 400px) {
-      .cool-button {
-        width: 140px; /* Even smaller initial width for very small screens */
-        height: 45px;
-        font-size: 12px; /* Further reduce font size */
+        font-weight: 600;
+        font-size: 17px; /* Default font size for larger screens */
       }
 
-      .cool-button.expanded {
-        max-width: 280px; /* Further adjust for smaller screens */
+      .static-text {
+        z-index: 0;
       }
 
-      .text-layer {
-        font-size: 12px; /* Match the button's font size */
-        padding: 0 8px; /* Slightly less padding for smaller screens */
+      .ghost-text {
+        z-index: 1;
+        pointer-events: none;
       }
-    }
-  </style>
-</head>
-<body>
 
-  <button class="cool-button" id="coolBtn">
-    <span class="text-layer static-text visible" id="staticText">Hello! (Hover pls)</span>
-    <span class="text-layer ghost-text hidden" id="textMain">Hello! (Hover pls)</span>
-    <span class="text-layer hidden" id="textFinal">Wassup Fren? All Good? Click Me for the Surprise, LFG!</span>
-  </button>
+      .zoom-out-fast {
+        animation: zoomOutFade 1s forwards;
+      }
 
-  <script>
-    const greetings = [
-      "こんにちは!", "হ্যালো!", "Hola!", "नमस्ते!", "Bonjour!", "Hallo!", "Hello!  (Hover pls)"
-    ];
-
-    const button = document.getElementById("coolBtn");
-    const textMain = document.getElementById("textMain");
-    const textFinal = document.getElementById("textFinal");
-    const staticText = document.getElementById("staticText");
-
-    let intervalId = null;
-    let index = 0;
-    let animationInProgress = false;
-    let animationCompleted = false;
-
-    // Function to adjust button width based on text content
-    function adjustButtonWidth() {
-      const allTexts = [
-        "Hello! (Hover pls)",
-        ...greetings,
-        "Wassup Fren? All Good? Click Me for the Surprise, LFG!"
-      ];
-      const tempSpan = document.createElement("span");
-      tempSpan.style.visibility = "hidden";
-      tempSpan.style.position = "absolute";
-      tempSpan.style.fontSize = window.innerWidth <= 400 ? "12px" : window.innerWidth <= 600 ? "13px" : "17px";
-      tempSpan.style.fontFamily = "'Roboto', sans-serif";
-      tempSpan.style.fontWeight = "600";
-      tempSpan.style.padding = "0 10px";
-      document.body.appendChild(tempSpan);
-
-      let maxWidth = 0;
-      allTexts.forEach(text => {
-        tempSpan.textContent = text;
-        const textWidth = tempSpan.offsetWidth;
-        maxWidth = Math.max(maxWidth, textWidth);
-      });
-
-      document.body.removeChild(tempSpan);
-
-      // Apply the calculated width to the button
-      if (window.innerWidth <= 600) {
-        button.style.width = `${Math.min(maxWidth + 20, 320)}px`; // Add padding and cap at max-width
-        if (button.classList.contains("expanded")) {
-          button.style.width = `${Math.min(maxWidth + 20, 320)}px`; // Ensure expanded width fits the longest text
+      @keyframes zoomOutFade {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1.4);
+          opacity: 0;
         }
       }
-    }
 
-    function resetButton() {
-      clearInterval(intervalId);
-      intervalId = null;
-      textMain.className = "text-layer ghost-text hidden";
-      textFinal.className = "text-layer hidden";
-      staticText.className = "text-layer static-text visible";
-      textMain.textContent = "Hello! (Hover pls)";
-      button.classList.remove("hovered", "expanded");
-      adjustButtonWidth(); // Adjust width on reset
-      index = 0;
-      animationInProgress = false;
-      animationCompleted = false;
-    }
+      .hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
 
-    function startAnimation() {
-      animationInProgress = true;
-      button.classList.add("hovered");
+      .visible {
+        opacity: 1;
+      }
 
-      textMain.textContent = "Hello! (Hover pls)";
-      textMain.className = "text-layer ghost-text visible zoom-out-fast";
+      /* Adjustments for smaller screens */
+      @media (max-width: 600px) {
+        .cool-button {
+          width: 140px; /* Smaller initial width */
+          height: 45px; /* Smaller initial height */
+          font-size: 12px; /* Smaller font size */
+        }
 
-      setTimeout(() => {
+        .cool-button.expanded {
+          width: 300px; /* Slightly smaller expanded width */
+          height: 38px; /* Slightly smaller expanded height */
+        }
+
+        .text-layer {
+          font-size: 12px; /* Smaller font size for text layers */
+        }
+
+        .cool-button.expanded #textFinal {
+          font-size: 9px; /* Even smaller font size for Wassup text */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="cool-button" id="coolBtn">
+      <span class="text-layer static-text visible" id="staticText">Hello! (Hover pls)</span>
+      <span class="text-layer ghost-text hidden" id="textMain">Hello! (Hover pls)</span>
+      <span class="text-layer hidden" id="textFinal">Wassup Fren? All Good? Click Me for the Surprise, LFG!</span>
+    </button>
+
+    <script>
+      const greetings = [
+        "こんにちは!", "হ্যালো!", "Hola!", "नमस्ते!", "Bonjour!", "Hallo!", "Hello!  (Hover pls)"
+      ];
+
+      const button = document.getElementById("coolBtn");
+      const textMain = document.getElementById("textMain");
+      const textFinal = document.getElementById("textFinal");
+      const staticText = document.getElementById("staticText");
+
+      let intervalId = null;
+      let index = 0;
+      let animationInProgress = false;
+      let animationCompleted = false;
+
+      // Function to adjust button width based on state and screen size
+      function adjustButtonWidth() {
+        const isSmallScreen = window.innerWidth <= 600;
+        if (button.classList.contains("expanded")) {
+          button.style.width = isSmallScreen ? "300px" : "570px"; // Slightly smaller expanded width for small screens
+        } else {
+          button.style.width = isSmallScreen ? "140px" : "195px"; // Smaller initial width for small screens
+        }
+      }
+
+      function resetButton() {
+        clearInterval(intervalId);
+        intervalId = null;
         textMain.className = "text-layer ghost-text hidden";
-        staticText.className = "text-layer static-text hidden";
+        textFinal.className = "text-layer hidden";
+        staticText.className = "text-layer static-text visible";
+        textMain.textContent = "Hello! (Hover pls)";
+        button.classList.remove("hovered", "expanded");
+        adjustButtonWidth(); // Adjust width on reset
         index = 0;
+        animationInProgress = false;
+        animationCompleted = false;
+      }
 
-        intervalId = setInterval(() => {
-          if (index < greetings.length - 1) {
-            textMain.textContent = greetings[index];
-            textMain.className = "text-layer ghost-text visible";
-            index++;
-          } else {
-            clearInterval(intervalId);
-            textMain.textContent = "Hello!";
-            setTimeout(() => {
-              textMain.className = "text-layer ghost-text visible zoom-out-fast";
-              setTimeout(() => {
-                textMain.className = "text-layer ghost-text hidden";
-                textFinal.className = "text-layer visible";
-                button.classList.add("expanded");
-                adjustButtonWidth(); // Adjust width when expanded
-                animationCompleted = true;
-                animationInProgress = false;
-              }, 800);
-            }, 100);
-          }
-        }, 500);
-      }, 500);
-    }
-
-    button.addEventListener("mouseenter", () => {
-      if (!animationInProgress && !animationCompleted) {
-        startAnimation();
-      } else {
+      function startAnimation() {
+        animationInProgress = true;
         button.classList.add("hovered");
+
+        textMain.textContent = "Hello! (Hover pls)";
+        textMain.className = "text-layer ghost-text visible zoom-out-fast";
+
+        setTimeout(() => {
+          textMain.className = "text-layer ghost-text hidden";
+          staticText.className = "text-layer static-text hidden";
+          index = 0;
+
+          intervalId = setInterval(() => {
+            if (index < greetings.length - 1) {
+              textMain.textContent = greetings[index];
+              textMain.className = "text-layer ghost-text visible";
+              index++;
+            } else {
+              clearInterval(intervalId);
+              textMain.textContent = "Hello!";
+              setTimeout(() => {
+                textMain.className = "text-layer ghost-text visible zoom-out-fast";
+                setTimeout(() => {
+                  textMain.className = "text-layer ghost-text hidden";
+                  textFinal.className = "text-layer visible";
+                  button.classList.add("expanded");
+                  adjustButtonWidth(); // Adjust width when expanded
+                  animationCompleted = true;
+                  animationInProgress = false;
+                }, 800);
+              }, 100);
+            }
+          }, 500);
+        }, 500);
       }
-    });
 
-    button.addEventListener("mouseleave", () => {
-      resetButton();
-    });
+      button.addEventListener("mouseenter", () => {
+        if (!animationInProgress && !animationCompleted) {
+          startAnimation();
+        } else {
+          button.classList.add("hovered");
+        }
+      });
 
-    button.addEventListener("click", () => {
-      if (animationCompleted) {
-        window.open("https://youtu.be/xvFZjo5PgG0?si=z9oLlZj7anCbpM21", "_blank");
-      }
-    });
+      button.addEventListener("mouseleave", () => {
+        resetButton();
+      });
 
-    // Adjust button width on page load and window resize
-    window.addEventListener("load", adjustButtonWidth);
-    window.addEventListener("resize", adjustButtonWidth);
-  </script>
+      button.addEventListener("click", () => {
+        if (animationCompleted) {
+          window.open("https://youtu.be/xvFZjo5PgG0?si=z9oLlZj7anCbpM21", "_blank");
+        }
+      });
 
-</body>
+      // Adjust button width on page load and window resize
+      window.addEventListener("load", adjustButtonWidth);
+      window.addEventListener("resize", adjustButtonWidth);
+    </script>
+  </body>
 </html>
