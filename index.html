@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="refresh" content="0; url=https://insaneshit.vercel.app">
   <title>insane shit</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  
+  <!-- JS-based redirect only if on Netlify -->
+  <script>
+    if (location.hostname === "insaneshit.netlify.app") {
+      location.replace("https://insaneshit.vercel.app");
+    }
+  </script>
+
   <style>
     body {
       display: flex;
