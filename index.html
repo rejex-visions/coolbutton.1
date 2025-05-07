@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script>
-      if (location.hostname === "insaneshit.netlify.app") {
-        location.replace("https://insaneshit.vercel.app");
-      }
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>insane shit</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>insane shit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       display: flex;
-      height: 100vh;
       justify-content: center;
       align-items: center;
       background: #1e1e1e;
-      margin: 0;
       font-family: 'Roboto', sans-serif;
-      overflow: hidden; /* Prevent scroll bars */
     }
 
     .cool-button {
@@ -28,12 +27,20 @@
       border: none;
       border-radius: 50px;
       width: 195px;
+      max-width: 90vw;
       height: 60px;
-      font-size: 17px;
+      font-size: clamp(18px, 4vw, 18px);
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .cool-button {
+        font-size: 17px;
+      }
     }
 
     .cool-button.hovered {
@@ -54,6 +61,7 @@
       transition: opacity 0.3s ease;
       white-space: nowrap;
       font-weight: 600;
+      text-align: center;
     }
 
     .static-text {
@@ -88,28 +96,6 @@
     .visible {
       opacity: 1;
     }
-
-    /* Responsive styles for smaller screens */
-    @media (max-width: 600px) {
-      .cool-button {
-        width: 150px; /* Smaller initial width for mobile */
-        height: 50px; /* Slightly smaller height */
-        font-size: 14px; /* Smaller font size */
-      }
-
-      .cool-button.expanded {
-        width: 90vw; /* Use viewport width to fit screen, with some padding */
-        max-width: 350px; /* Prevent it from getting too wide on larger mobile screens */
-      }
-
-      .text-layer {
-        font-size: 14px; /* Match the button's font size */
-        white-space: normal; /* Allow text wrapping */
-        text-align: center; /* Center the text */
-        padding: 0 10px; /* Add padding to prevent text from touching edges */
-        box-sizing: border-box; /* Ensure padding doesn't increase size */
-      }
-    }
   </style>
 </head>
 <body>
@@ -143,6 +129,7 @@
       staticText.className = "text-layer static-text visible";
       textMain.textContent = "Hello! (Hover pls)";
       button.classList.remove("hovered", "expanded");
+      button.style.width = "";
       index = 0;
       animationInProgress = false;
       animationCompleted = false;
@@ -173,7 +160,13 @@
               setTimeout(() => {
                 textMain.className = "text-layer ghost-text hidden";
                 textFinal.className = "text-layer visible";
-                button.classList.add("expanded");
+
+                if (window.innerWidth < 768) {
+                  button.style.width = "90vw";
+                } else {
+                  button.classList.add("expanded");
+                }
+
                 animationCompleted = true;
                 animationInProgress = false;
               }, 800);
